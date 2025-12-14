@@ -1,6 +1,7 @@
 -- Import libraries:
 local Object = require("libs.classic")
 local g3d = require("libs.g3d")
+local flux = require("libs.flux")
 --------------------------------------
 
 local Player = Object:extend()
@@ -129,7 +130,7 @@ function Player:new(x, y, z)
             currentAnimation = "walking",
             currentAnimationFrame = 2,
             currentTimer = 0,
-            maxTimer = 1,
+            maxTimer = 0.7,
 
             walking = {
                 { -- Frame 1
@@ -297,6 +298,7 @@ end
 function Player:update(dt)
     local currentAnimation = self.animations.currentAnimation
     local currentFrame = self.animations.currentAnimationFrame
+    local maxTimer = self.animations.maxTimer
 
     -- Update each body model part's transformation based
     -- on the current animation frame's transformation.
@@ -304,8 +306,12 @@ function Player:update(dt)
         if (currentAnimation == index) then
             for key, modelPart in pairs(self.models) do
                 local currentAnimationFrame = self.animations[currentAnimation][currentFrame][key]
+                local tweenVel = maxTimer - 0.5
 
-                modelPart.transform = currentAnimationFrame
+                --modelPart.transform = currentAnimationFrame
+                flux.to(modelPart.transform.rotation, tweenVel, currentAnimationFrame.rotation)
+                flux.to(modelPart.transform.scale, tweenVel, currentAnimationFrame.scale)
+                flux.to(modelPart.transform.translation, tweenVel, currentAnimationFrame.translation)
             end
         end
     end
@@ -314,7 +320,7 @@ function Player:update(dt)
     -- it's max limit. If not, update the current animation frame,
     -- if the animation hasn't reached it's final frame yet.
     self.animations.currentTimer = self.animations.currentTimer + dt
-    if (self.animations.currentTimer > self.animations.maxTimer) then
+    if (self.animations.currentTimer > maxTimer) then
         self.animations.currentTimer = 0
 
         if (self.animations.currentAnimationFrame < #self.animations[currentAnimation]) then
@@ -323,6 +329,8 @@ function Player:update(dt)
             self.animations.currentAnimationFrame = 1
         end
     end
+
+    flux.update(dt) -- Update tweening library.
 end
 
 function Player:draw()
