@@ -26,7 +26,7 @@ function Button:new(x, y, text, callback, backgroundColor, hoveredColor, textCol
 
     -- Set button callback.
     local function defaultCallback()
-        print("Button without asigned callback function...")
+        print("Button without assigned callback function...")
     end
     self.callback = callback or defaultCallback
 end
