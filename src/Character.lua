@@ -4,9 +4,9 @@ local g3d = require("libs.g3d")
 local flux = require("libs.flux")
 --------------------------------------
 
-local Player = Object:extend()
+local Character = Object:extend()
 
-function Player:new(x, y, z)
+function Character:new(x, y, z, skin)
     -- Creates 3D models for each body part with it's own
     -- transformation attributes (translation, rotation and scale).
     -- The texture and model files follow a specific naming 
@@ -120,7 +120,7 @@ function Player:new(x, y, z)
 
         return models
     end
-    self.models = createBodyModels(_G.GAME_PATHS.playerModels, "guy")
+    self.models = createBodyModels(_G.GAME_PATHS.playerModels, skin or "guy")
 
     -- Creates animations. Each animation has several 
     -- "frame" tables with transformation information 
@@ -295,7 +295,7 @@ function Player:new(x, y, z)
     self.animations = createAnimations()
 end
 
-function Player:update(dt)
+function Character:update(dt)
     local currentAnimation = self.animations.currentAnimation
     local currentFrame = self.animations.currentAnimationFrame
     local maxTimer = self.animations.maxTimer
@@ -341,7 +341,7 @@ function Player:update(dt)
     flux.update(dt) -- Update tweening library.
 end
 
-function Player:draw()
+function Character:draw()
     -- Goes through every single body part model
     -- and draws the specific body part, based on
     -- it's own transformation attributes.
@@ -356,4 +356,4 @@ function Player:draw()
     end
 end
 
-return Player
+return Character
