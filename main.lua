@@ -23,6 +23,7 @@ function love.load()
 end
 
 function love.update(dt)
+    Player1:update(dt)
     _G.GAME_CONTROLLER:update(dt)
     g3d.camera.firstPersonMovement(dt)
 end

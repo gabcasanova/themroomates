@@ -1,5 +1,5 @@
 function love.conf(t)
-    t.window.title = "Them Roomates!"
+    t.window.title = "The Troublemakers!"
     
     t.console = true
     

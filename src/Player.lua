@@ -5,78 +5,338 @@ local g3d = require("libs.g3d")
 
 local Player = Object:extend()
 
-function Player:new(x, y)
-    self.modelName = "guy"
-    self.modelPaths = {
-        head = {
-            model = _G.GAME_PATHS.playerModels.heads .. self.modelName .. "_Head.obj",
-            texture = _G.GAME_PATHS.playerModels.heads .. self.modelName .. "_Head.png"
-        },
-        body = {
-            model = _G.GAME_PATHS.playerModels.bodies .. self.modelName .. "_Body.obj",
-            texture = _G.GAME_PATHS.playerModels.bodies .. self.modelName .. "_Body.png",
-        },
-        leg = {
-            top = _G.GAME_PATHS.playerModels.legs .. self.modelName .. "_LegTop.obj",
-            bottom = _G.GAME_PATHS.playerModels.legs .. self.modelName .. "_LegBottom.obj",
-            texture = _G.GAME_PATHS.playerModels.legs .. self.modelName .. "_Leg.png"
-        },
-        arm = {
-            top = _G.GAME_PATHS.playerModels.arms .. self.modelName .. "_ArmTop.obj",
-            bottom = _G.GAME_PATHS.playerModels.arms .. self.modelName .. "_ArmBottom.obj",
-            texture = _G.GAME_PATHS.playerModels.arms .. self.modelName .. "_Arm.png"
+function Player:new(x, y, z)
+    -- Creates 3D models for each body part with it's own
+    -- transformation attributes (translation, rotation and scale).
+    -- The texture and model files follow a specific naming 
+    -- convention: [name of the skin] + "_" + [body part name]
+    local function createBodyModels(path, modelName)
+        local models = {
+            head = {
+                model = path.heads .. modelName .. "_Head.obj",
+                texture = path.heads .. modelName .. "_Head.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            },
+            body = {
+                model = path.bodies .. modelName .. "_Body.obj",
+                texture = path.bodies .. modelName .. "_Body.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            },
+            armTopRight = {
+                model = path.arms .. modelName .. "_ArmTop.obj",
+                texture = path.arms .. modelName .. "_Arm.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            },
+            armBottomRight = {
+                model = path.arms .. modelName .. "_ArmBottom.obj",
+                texture = path.arms .. modelName .. "_Arm.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            },
+            armTopLeft = {
+                model = path.arms .. modelName .. "_ArmTop.obj",
+                texture = path.arms .. modelName .. "_Arm.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                }
+            },
+            armBottomLeft = {
+                model = path.arms .. modelName .. "_ArmBottom.obj",
+                texture = path.arms .. modelName .. "_Arm.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                }
+            },
+            legTopRight = {
+                model = path.legs .. modelName .. "_LegTop.obj",
+                texture = path.legs .. modelName .. "_Leg.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                }
+            },
+            legBottomRight = {
+                model = path.legs .. modelName .. "_LegBottom.obj",
+                texture = path.legs .. modelName .. "_Leg.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                }
+            },
+            legTopLeft = {
+                model = path.legs .. modelName .. "_LegTop.obj",
+                texture = path.legs .. modelName .. "_Leg.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            },
+            legBottomLeft = {
+                model = path.legs .. modelName .. "_LegBottom.obj",
+                texture = path.legs .. modelName .. "_Leg.png",
+                transform = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            }
         }
-    }
 
-    self.armLeftOffset = 0
-    self.model = {
-        head = g3d.newModel(
-            self.modelPaths.head.model, self.modelPaths.head.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, 1}
-        ),
-        body = g3d.newModel(
-            self.modelPaths.body.model, self.modelPaths.body.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, 1}
-        ),
-        armTopRight = g3d.newModel(
-            self.modelPaths.arm.top, self.modelPaths.arm.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, 1}
-        ),
-        armBottomRight = g3d.newModel(
-            self.modelPaths.arm.bottom, self.modelPaths.arm.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, 1}
-        ),
-        armTopLeft = g3d.newModel(
-            self.modelPaths.arm.top, self.modelPaths.arm.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, -1}
-        ),
-        armBottomLeft = g3d.newModel(
-            self.modelPaths.arm.bottom, self.modelPaths.arm.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, -1}
-        ),
-        legTopLeft = g3d.newModel(
-            self.modelPaths.leg.top, self.modelPaths.leg.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, 1}
-        ),
-        legBottomLeft = g3d.newModel(
-            self.modelPaths.leg.bottom, self.modelPaths.leg.texture, 
-            {0,0,0}, {1.5,0,0}, {1, 1, 1}
-        ),
-        legTopRight = g3d.newModel(
-            self.modelPaths.leg.top, self.modelPaths.leg.texture, 
-            {0,-0.05,0}, {1.5,0,0}, {1, 1, -1}
-        ),
-        legBottomRight = g3d.newModel(
-            self.modelPaths.leg.bottom, self.modelPaths.leg.texture, 
-            {0,-0.05,0}, {1.5,0,0}, {1, 1, -1}
-        )
-    }
-    self.angle = 0
+        -- Creates 3D objects for each model part.
+        for index, modelPart in pairs(models) do
+            local currentPart = models[index]
+
+            models[index].model3d = g3d.newModel(
+                currentPart.model, 
+                currentPart.texture, 
+                currentPart.transform.translation,
+                currentPart.transform.rotation,
+                currentPart.transform.scale
+            )
+        end
+
+        return models
+    end
+    self.models = createBodyModels(_G.GAME_PATHS.playerModels, "guy")
+
+    -- Creates animations. Each animation has several 
+    -- "frame" tables with transformation information 
+    -- for each body part.
+    local function createAnimations()
+        return {
+            currentAnimation = "walking",
+            currentAnimationFrame = 2,
+            currentTimer = 0,
+            maxTimer = 1,
+
+            walking = {
+                { -- Frame 1
+                    head = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    body = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armTopRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armBottomRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armTopLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    armBottomLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legTopRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legBottomRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legTopLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    legBottomLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    }
+                },
+                { -- Frame 2
+                    head = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1.5, 1.5, 1.5}
+                    },
+                    body = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armTopRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armBottomRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armTopLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    armBottomLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legTopRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legBottomRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legTopLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    legBottomLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    }
+                },
+                { -- Frame 3
+                    head = {
+                        translation = {-0.5, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1.5, 1.5, 1.5}
+                    },
+                    body = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armTopRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armBottomRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    armTopLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    armBottomLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legTopRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legBottomRight = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, -1}
+                    },
+                    legTopLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    },
+                    legBottomLeft = {
+                        translation = {0, 0, 0},
+                        rotation = {1.5, 0, 0},
+                        scale = {1, 1, 1}
+                    }
+                }
+            }
+        }
+    end
+    self.animations = createAnimations()
+end
+
+function Player:update(dt)
+    local currentAnimation = self.animations.currentAnimation
+    local currentFrame = self.animations.currentAnimationFrame
+
+    -- Update each body model part's transformation based
+    -- on the current animation frame's transformation.
+    for index, animation in pairs(self.animations) do
+        if (currentAnimation == index) then
+            for key, modelPart in pairs(self.models) do
+                local currentAnimationFrame = self.animations[currentAnimation][currentFrame][key]
+
+                modelPart.transform = currentAnimationFrame
+            end
+        end
+    end
+
+    -- Update animations timer, if the timer hasn't reached 
+    -- it's max limit. If not, update the current animation frame,
+    -- if the animation hasn't reached it's final frame yet.
+    self.animations.currentTimer = self.animations.currentTimer + dt
+    if (self.animations.currentTimer > self.animations.maxTimer) then
+        self.animations.currentTimer = 0
+
+        if (self.animations.currentAnimationFrame < #self.animations[currentAnimation]) then
+            self.animations.currentAnimationFrame = self.animations.currentAnimationFrame + 1 
+        else
+            self.animations.currentAnimationFrame = 1
+        end
+    end
 end
 
 function Player:draw()
-    for key, modelPart in pairs(self.model) do
-        modelPart:draw()
+    -- Goes through every single body part model
+    -- and draws the specific body part, based on
+    -- it's own transformation attributes.
+    for key, modelPart in pairs(self.models) do
+        modelPart.model3d:draw()
+
+        modelPart.model3d:setTransform(
+            modelPart.transform.translation,
+            modelPart.transform.rotation,
+            modelPart.transform.scale
+        )
     end
 end
 
