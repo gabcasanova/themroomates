@@ -12,7 +12,6 @@ local GameController = require("src.GameController")
 local Player = require("src.Player")
 
 _G.GAME_CONTROLLER = GameController()
-_G.QUAKE_MODE = false
 ----------------------------------------------------
 
 local Player1
@@ -35,8 +34,12 @@ function love.draw()
     _G.GAME_CONTROLLER:draw()
 end
 
-function love.mousemoved(x,y, dx,dy)
-    g3d.camera.firstPersonLook(dx,dy)
+function love.mousemoved(x, y, dx, dy)
+    --g3d.camera.firstPersonLook(dx,dy)
+end
+
+function love.mousepressed(x, y, button, isTouch, presses)
+    _G.GAME_CONTROLLER:mousepressed(x, y, button, isTouch, presses)
 end
 
 local love_errorhandler = love.errorhandler
