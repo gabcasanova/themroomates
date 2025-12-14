@@ -10,9 +10,10 @@ local g3d = require("libs.g3d")
 -- Import Classes:
 local GameController = require("src.GameController")
 local Player = require("src.Player")
-----------------------------------------------------
 
 _G.GAME_CONTROLLER = GameController()
+_G.QUAKE_MODE = false
+----------------------------------------------------
 
 local Player1
 local background = g3d.newModel("assets/models/sphere.obj", "assets/textures/starfield.png", {0,0,0}, nil, {500,500,500})

@@ -130,7 +130,7 @@ function Player:new(x, y, z)
             currentAnimation = "walking",
             currentAnimationFrame = 2,
             currentTimer = 0,
-            maxTimer = 0.7,
+            maxTimer = 1,
 
             walking = {
                 { -- Frame 1
@@ -306,12 +306,20 @@ function Player:update(dt)
         if (currentAnimation == index) then
             for key, modelPart in pairs(self.models) do
                 local currentAnimationFrame = self.animations[currentAnimation][currentFrame][key]
-                local tweenVel = maxTimer - 0.5
+                local tweenVel = maxTimer - (maxTimer/2)
+                local easing = "quadout"
 
-                --modelPart.transform = currentAnimationFrame
-                flux.to(modelPart.transform.rotation, tweenVel, currentAnimationFrame.rotation)
-                flux.to(modelPart.transform.scale, tweenVel, currentAnimationFrame.scale)
-                flux.to(modelPart.transform.translation, tweenVel, currentAnimationFrame.translation)
+                -- Tween animation frames.
+                if (not QUAKE_MODE) then
+                    flux.to(modelPart.transform.rotation, tweenVel, currentAnimationFrame.rotation)
+                        :ease(easing)
+                    flux.to(modelPart.transform.scale, tweenVel, currentAnimationFrame.scale)
+                        :ease(easing)
+                    flux.to(modelPart.transform.translation, tweenVel, currentAnimationFrame.translation)
+                        :ease(easing)
+                else
+                    modelPart.transform = currentAnimationFrame
+                end
             end
         end
     end
