@@ -7,6 +7,7 @@ local CheckCollision = require("libs.usefulScripts.boundingbox")
 local Button = Object:extend()
 
 function Button:new(x, y, text, callback, backgroundColor, hoveredColor, textColor, margin)
+    self.identifier = "button"
     self.text = text or "Button"
     self.margin = margin or 5
     self.font = _G.ASSETS.fonts.ui

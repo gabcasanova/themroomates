@@ -42,7 +42,7 @@ function AnimationCreator:new()
         self.gui["button_animation" .. i] = Button(
             10 + (i-1)*40, 
             windowHeight-40, 
-            " " .. i .. " ", 
+            i, 
             function () 
                 self.objects.character.animations.currentAnimationFrame = i
             end
@@ -58,8 +58,20 @@ function AnimationCreator:update(dt)
     
     -- Update GUI.
     if (not self.cameraFPS) then 
-        for index, button in pairs(self.gui) do
-            button:update(dt)
+        for index, guiELement in pairs(self.gui) do
+            -- Update all GUI elements
+            guiELement:update(dt)
+
+            -- In the buttons related to the animation timeline,
+            -- light up the one that's currently related to the
+            -- current player animation frame.
+            if (string.find(index, "button_animation")) then
+                if ((self.objects.character.animations.currentAnimationFrame) == guiELement.text) then
+                    guiELement:setColor("#FFFFFF", "#FFFFFF")
+                else 
+                    guiELement:setColor()
+                end
+            end
         end
     else
         g3d.camera.firstPersonMovement(dt)

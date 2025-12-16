@@ -140,7 +140,6 @@ function Character:new(x, y, z, skin)
         }
 
         -- Populate the empty baseAnimation with 10 frames
-        local base
         for i = 1, 10, 1 do
             animations.baseAnimation.frames[i] = {
                 head = {
