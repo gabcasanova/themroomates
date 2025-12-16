@@ -20,7 +20,12 @@ function love.draw()
     _G.GAME_CONTROLLER:draw()
 end
 
+function love.keypressed(key, scancode, isrepeat)
+    _G.GAME_CONTROLLER:keypressed(key, scancode, isrepeat)
+end
+
 function love.mousemoved(x, y, dx, dy)
+    _G.GAME_CONTROLLER:mousemoved(x, y, dx, dy)
 end
 
 function love.mousepressed(x, y, button, isTouch, presses)

@@ -40,11 +40,21 @@ function GameController:update(dt)
         love.event.quit()
     end
 
+    love.mouse.setCursor(love.mouse.getSystemCursor("arrow"))
+
     _G.UI_SCREEN:update(dt)
 end
 
 function GameController:draw()
     _G.UI_SCREEN:draw()
+end
+
+function GameController:keypressed(key, scancode, isrepeat)
+    _G.UI_SCREEN:keypressed(key, scancode, isrepeat)
+end
+
+function GameController:mousemoved(x, y, dx, dy)
+    _G.UI_SCREEN:mousemoved(x, y, dx, dy) 
 end
 
 function GameController:mousepressed(x, y, button, isTouch, presses)

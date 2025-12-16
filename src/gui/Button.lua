@@ -36,8 +36,9 @@ function Button:update(dt)
     local mouseX, mouseY = love.mouse.getPosition()
     self.hovered = CheckCollision(mouseX, mouseY, 1, 1, self.x, self.y, self.w, self.h)
 
-    local mouseCursor = self.hovered and "hand" or "arrow"
-    love.mouse.setCursor(love.mouse.getSystemCursor(mouseCursor))
+    if (self.hovered) then
+        love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
+    end
 end
 
 function Button:draw()
@@ -58,9 +59,17 @@ end
 
 function Button:mousepressed(x, y, button, isTouch, presses)
     -- Execute button callback.
-    if (self.hovered) then
+    if (self.hovered and button == 1) then
         self.callback()
     end
+end
+
+function Button:setColor(backgroundColor, hoveredColor, textColor)
+    -- Set button appereance.
+    local colors = _G.COLORS
+    self.backgroundColor = Color(backgroundColor or colors.darkGrey)
+    self.hoveredColor = Color(hoveredColor or colors.lightGrey) 
+    self.textColor = Color(textColor or colors.black)
 end
 
 return Button

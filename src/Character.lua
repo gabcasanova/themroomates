@@ -126,171 +126,77 @@ function Character:new(x, y, z, skin)
     -- "frame" tables with transformation information 
     -- for each body part.
     local function createAnimations()
-        return {
-            currentAnimation = "walking",
-            currentAnimationFrame = 2,
+        local animations = {
+            currentAnimation = "baseAnimation",
+            animationPlaying = false,
+            currentAnimationFrame = 1,
             currentTimer = 0,
             maxTimer = 1,
 
-            walking = {
-                { -- Frame 1
-                    head = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    body = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armTopRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armBottomRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armTopLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    armBottomLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legTopRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legBottomRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legTopLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    legBottomLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    }
-                },
-                { -- Frame 2
-                    head = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1.5, 1.5, 1.5}
-                    },
-                    body = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armTopRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armBottomRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armTopLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    armBottomLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legTopRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legBottomRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legTopLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    legBottomLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    }
-                },
-                { -- Frame 3
-                    head = {
-                        translation = {-0.5, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1.5, 1.5, 1.5}
-                    },
-                    body = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armTopRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armBottomRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    armTopLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    armBottomLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legTopRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legBottomRight = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, -1}
-                    },
-                    legTopLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    },
-                    legBottomLeft = {
-                        translation = {0, 0, 0},
-                        rotation = {1.5, 0, 0},
-                        scale = {1, 1, 1}
-                    }
-                }
+            baseAnimation = {
+                maxFrames = 2,
+                frames = {}
             }
         }
+
+        -- Populate the empty baseAnimation with 10 frames
+        local base
+        for i = 1, 10, 1 do
+            animations.baseAnimation.frames[i] = {
+                head = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                },
+                body = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                },
+                armTopRight = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                },
+                armBottomRight = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                },
+                armTopLeft = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                },
+                armBottomLeft = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                },
+                legTopRight = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                },
+                legBottomRight = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, -1}
+                },
+                legTopLeft = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                },
+                legBottomLeft = {
+                    translation = {0, 0, 0},
+                    rotation = {1.5, 0, 0},
+                    scale = {1, 1, 1}
+                }
+            }
+        end
+
+        return animations
     end
     self.animations = createAnimations()
 end
@@ -305,7 +211,7 @@ function Character:update(dt)
     for index, animation in pairs(self.animations) do
         if (currentAnimation == index) then
             for key, modelPart in pairs(self.models) do
-                local currentAnimationFrame = self.animations[currentAnimation][currentFrame][key]
+                local currentAnimationFrame = self.animations[currentAnimation]["frames"][currentFrame][key]
                 local tweenVel = maxTimer - (maxTimer/2)
                 local easing = "quadout"
 
@@ -327,14 +233,17 @@ function Character:update(dt)
     -- Update animations timer, if the timer hasn't reached 
     -- it's max limit. If not, update the current animation frame,
     -- if the animation hasn't reached it's final frame yet.
-    self.animations.currentTimer = self.animations.currentTimer + dt
-    if (self.animations.currentTimer > maxTimer) then
-        self.animations.currentTimer = 0
+    if (self.animations.animationPlaying) then
+        self.animations.currentTimer = self.animations.currentTimer + dt
+        if (self.animations.currentTimer > maxTimer) then
+            self.animations.currentTimer = 0
+            local maxFrame = self.animations[currentAnimation].maxFrames
 
-        if (self.animations.currentAnimationFrame < #self.animations[currentAnimation]) then
-            self.animations.currentAnimationFrame = self.animations.currentAnimationFrame + 1 
-        else
-            self.animations.currentAnimationFrame = 1
+            if (self.animations.currentAnimationFrame < maxFrame) then
+                self.animations.currentAnimationFrame = self.animations.currentAnimationFrame + 1 
+            else
+                self.animations.currentAnimationFrame = 1
+            end
         end
     end
 

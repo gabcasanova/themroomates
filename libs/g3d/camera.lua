@@ -20,6 +20,12 @@ local camera = {
 
     viewMatrix = newMatrix(),
     projectionMatrix = newMatrix(),
+
+    -- ## CASANOVA PATCH ##
+    fpsController = {
+        direction = 0,
+        pitch = 0,
+    }
 }
 
 -- private variables used only for the first person camera functions
@@ -73,6 +79,7 @@ function camera.lookInDirection(x,y,z, directionTowards,pitchTowards)
 
     fpsController.direction = directionTowards or fpsController.direction
     fpsController.pitch = pitchTowards or fpsController.pitch
+    camera.fpsController = fpsController -- ## CASANOVA PATCH ##
 
     -- turn the cos of the pitch into a sign value, either 1, -1, or 0
     local sign = math.cos(fpsController.pitch)
